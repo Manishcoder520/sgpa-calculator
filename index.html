@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SGPA Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 8px;
+    }
+    input[readonly] {
+      background-color: #eee;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .result {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #005c99;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SGPA Calculator</h1>
+    <form id="sgpaForm">
+      <table>
+        <tr>
+          <th>Subject</th>
+          <th>Internal</th>
+          <th>External</th>
+        </tr>
+        <tr>
+          <td><input type="text" value="Mathematics" readonly /></td>
+          <td><input type="number" name="internal" min="0" max="30" required /></td>
+          <td><input type="number" name="external" min="0" max="70" required /></td>
+        </tr>
+        <tr>
+          <td><input type="text" value="Physics" readonly /></td>
+          <td><input type="number" name="internal" min="0" max="30" required /></td>
+          <td><input type="number" name="external" min="0" max="70" required /></td>
+        </tr>
+        <tr>
+          <td><input type="text" value="Economics" readonly /></td>
+          <td><input type="number" name="internal" min="0" max="30" required /></td>
+          <td><input type="number" name="external" min="0" max="70" required /></td>
+        </tr>
+        <tr>
+          <td><input type="text" value="EDG" readonly /></td>
+          <td><input type="number" name="internal" min="0" max="30" required /></td>
+          <td><input type="number" name="external" min="0" max="70" required /></td>
+        </tr>
+        <tr>
+          <td><input type="text" value="PFP" readonly /></td>
+          <td><input type="number" name="internal" min="0" max="30" required /></td>
+          <td><input type="number" name="external" min="0" max="70" required /></td>
+        </tr>
+      </table>
+      <button type="button" onclick="calculateSGPA()">Calculate SGPA</button>
+    </form>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    function calculateSGPA() {
+      const internalInputs = document.getElementsByName("internal");
+      const externalInputs = document.getElementsByName("external");
+
+      let totalPoints = 0;
+      let totalSubjects = internalInputs.length;
+
+      for (let i = 0; i < totalSubjects; i++) {
+        let internal = parseInt(internalInputs[i].value) || 0;
+        let external = parseInt(externalInputs[i].value) || 0;
+        let total = internal + external;
+
+        let gradePoint = 0;
+
+        if (total >= 90) gradePoint = 10;
+        else if (total >= 80) gradePoint = 9;
+        else if (total >= 70) gradePoint = 8;
+        else if (total >= 60) gradePoint = 7;
+        else if (total >= 50) gradePoint = 6;
+        else if (total >= 40) gradePoint = 5;
+        else gradePoint = 0;
+
+        totalPoints += gradePoint;
+      }
+
+      let sgpa = (totalPoints / totalSubjects).toFixed(2);
+      document.getElementById("result").innerText = "Your SGPA is: " + sgpa;
+    }
+  </script>
+</body>
+</html>
