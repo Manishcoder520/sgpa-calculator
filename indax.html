@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SGPA Calculator - 2025</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      padding: 20px;
+      color: #222;
+    }
+    h1 {
+      text-align: center;
+      color: #00796b;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #00796b;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f1f8e9;
+    }
+    input[type="number"], input[readonly] {
+      width: 70px;
+      padding: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #00796b;
+      color: white;
+      border: none;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #resultPage {
+      display: none;
+      margin-top: 30px;
+      background-color: #e0f2f1;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .summary {
+      font-size: 18px;
+      color: #004d40;
+      margin-bottom: 15px;
+    }
+    .highlight {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+    .grade-table {
+      margin-top: 20px;
+    }
+    .grade-table th {
+      background-color: #004d40;
+    }
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      color: #444;
+      text-align: center;
+      font-size: 14px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<h1>SGPA Calculator - 2025</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Subject</th>
+      <th>Internal</th>
+      <th>External</th>
+      <th>Total</th>
+      <th>Out of</th>
+      <th>Credits</th>
+      <th>Grade Point</th>
+    </tr>
+  </thead>
+  <tbody id="marksTable">
+    <tr>
+      <td>Physics</td>
+      <td><input type="number" id="i1"></td>
+      <td><input type="number" id="e1"></td>
+      <td id="t1">-</td>
+      <td>150</td>
+      <td>4</td>
+      <td id="g1">-</td>
+    </tr>
+    <tr>
+      <td>Mathematics-II</td>
+      <td><input type="number" id="i2"></td>
+      <td><input type="number" id="e2"></td>
+      <td id="t2">-</td>
+      <td>100</td>
+      <td>4</td>
+      <td id="g2">-</td>
+    </tr>
+    <tr>
+      <td>Engineering Drawing</td>
+      <td><input type="number" id="i3"></td>
+      <td><input type="number" id="e3"></td>
+      <td id="t3">-</td>
+      <td>100</td>
+      <td>3</td>
+      <td id="g3">-</td>
+    </tr>
+    <tr>
+      <td>Python Programming</td>
+      <td><input type="number" id="i4"></td>
+      <td><input type="number" id="e4"></td>
+      <td id="t4">-</td>
+      <td>150</td>
+      <td>3</td>
+      <td id="g4">-</td>
+    </tr>
+    <tr>
+      <td>Economics</td>
+      <td><input type="number" id="i5"></td>
+      <td><input type="number" id="e5"></td>
+      <td id="t5">-</td>
+      <td>100</td>
+      <td>2</td>
+      <td id="g5">-</td>
+    </tr>
+    <tr>
+      <td>Manufacturing Practices</td>
+      <td><input type="number" id="i6"></td>
+      <td><input type="text" id="e6" value="-" disabled readonly></td>
+      <td id="t6">-</td>
+      <td>50</td>
+      <td>1</td>
+      <td id="g6">-</td>
+    </tr>
+    <tr>
+      <td>MPD</td>
+      <td><input type="number" id="i7"></td>
+      <td><input type="text" id="e7" value="-" disabled readonly></td>
+      <td id="t7">-</td>
+      <td>100</td>
+      <td>1</td>
+      <td id="g7">-</td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="text-align:center;">
+  <button onclick="calculateSGPA()">Calculate SGPA</button>
+</div>
+
+<div id="resultPage">
+  <div class="summary" id="totalMarksInfo"></div>
+  <div class="summary" id="sgpaResult"></div>
+
+  <table class="grade-table" border="1">
+    <thead>
+      <tr>
+        <th>Marks Range</th>
+        <th>Grade Point</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>90 - 100%</td><td>10</td></tr>
+      <tr><td>80 - 89%</td><td>9</td></tr>
+      <tr><td>70 - 79%</td><td>8</td></tr>
+      <tr><td>60 - 69%</td><td>7</td></tr>
+      <tr><td>50 - 59%</td><td>6</td></tr>
+      <tr><td>40 - 49%</td><td>5</td></tr>
+      <tr><td>Below 40%</td><td>0 (Fail)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function calculateSGPA() {
+    const credits = [4, 4, 3, 3, 2, 1, 1];
+    const maxMarksArr = [150, 100, 100, 150, 100, 50, 100];
+    let totalPoints = 0;
+    let totalCredits = 0;
+    let totalMarks = 0;
+    let maxMarks = 0;
+
+    for (let i = 1; i <= 7; i++) {
+      const internal = parseInt(document.getElementById(`i${i}`).value) || 0;
+      const externalField = document.getElementById(`e${i}`);
+      const external = externalField.disabled ? 0 : parseInt(externalField.value) || 0;
+      const total = internal + external;
+      const max = maxMarksArr[i - 1];
+
+      if (internal < 0 || internal > max || (!externalField.disabled && (external < 0 || external > max))) {
+        alert(`❌ Invalid marks in Subject ${i}. Please enter correct values.`);
+        return;
+      }
+
+      document.getElementById(`t${i}`).innerText = total;
+      const percent = (total / max) * 100;
+
+      let gradePoint;
+      if (percent >= 90) gradePoint = 10;
+      else if (percent >= 80) gradePoint = 9;
+      else if (percent >= 70) gradePoint = 8;
+      else if (percent >= 60) gradePoint = 7;
+      else if (percent >= 50) gradePoint = 6;
+      else if (percent >= 40) gradePoint = 5;
+      else gradePoint = 0;
+
+      document.getElementById(`g${i}`).innerText = gradePoint;
+
+      totalPoints += gradePoint * credits[i - 1];
+      totalCredits += credits[i - 1];
+      totalMarks += total;
+      maxMarks += max;
+    }
+
+    const sgpa = (totalPoints / totalCredits).toFixed(2);
+    document.getElementById("sgpaResult").innerHTML = `✅ <strong>SGPA:</strong> <span class="highlight">${sgpa}</span>`;
+    document.getElementById("totalMarksInfo").innerHTML = `📊 <strong>Total Marks:</strong> ${totalMarks} / ${maxMarks}`;
+    document.getElementById("resultPage").style.display = "block";
+  }
+</script>
+
+<footer>
+  Made with by <strong>Manish</strong><br>
+  <span style="font-size: 12px;">© 2025 All Rights Reserved</span>
+</footer>
+
+</body>
+</html>
